@@ -53,7 +53,7 @@ public class MainView extends VerticalLayout {
     private Component createHeader() {
         H1 title = new H1("Welcome to Market-Mate!");
 
-        // This text will now be visible because the background is green
+
         title.getStyle().set("color", "white");
         title.getStyle().set("font-family", "Georgia, serif");
         title.getStyle().set("margin-top", "20px");

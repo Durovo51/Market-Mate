@@ -2,8 +2,11 @@
 
 package dev.durovo.Market_Mate;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -22,32 +25,104 @@ public class CartView extends VerticalLayout {
         setSizeFull();
         setAlignItems(Alignment.CENTER);
 
+        add(
+                createHeader(),
+                createCartItems(),
+                createBackButton()
+        );
+    }
+
+    private Component createBackButton() {
+        Button backButton = new Button("Back");
+        backButton.getStyle().set("color", "black");
+        backButton.getStyle().set("background-color", "white");
+        backButton.getStyle().set("cursor", "pointer");
+        backButton.addClickListener(e -> {
+            backButton.getUI().ifPresent(ui ->
+                    ui.navigate(MainView.class)
+            );
+        });
+        return backButton;
+    }
+
+    private Component createHeader() {
+        H1 cartTitle = new H1("Your Shopping Cart");
+        cartTitle.getStyle().set("color", "white");
+        cartTitle.getStyle().set("font-family", "Georgia, serif");
+        cartTitle.getStyle().set("margin-top", "20px");
+
+        HorizontalLayout header = new HorizontalLayout(cartTitle);
+        header.setWidthFull();
+        header.setJustifyContentMode(JustifyContentMode.CENTER);
+        return header;
+    }
+
+    private Component createCartItems() {
+        // Create a container to hold the rows so we can return one Component at the end
+        VerticalLayout itemsContainer = new VerticalLayout();
+        itemsContainer.setAlignItems(Alignment.CENTER);
+        // Add some spacing between the cards
+        itemsContainer.getStyle().set("gap", "15px");
+
         ArrayList<String> names = getCartItemNames();
         ArrayList<Double> prices = getCartItemPrices();
 
-        add(new H1("Your Shopping Cart"));
-        add("Items in your cart: ");
         if (names.isEmpty()) {
-            add(new Span("Your cart is empty."));
+            Span emptyText = new Span("Your cart is empty.");
+            emptyText.getStyle().set("color", "white");
+            emptyText.getStyle().set("font-size", "1.2rem");
+            itemsContainer.add(emptyText);
         } else {
             for (int i = 0; i < names.size(); i++) {
                 String itemName = names.get(i);
                 Double itemPrice = prices.get(i);
 
+                HorizontalLayout card = new HorizontalLayout();
 
-                HorizontalLayout row = new HorizontalLayout();
+                //Structure & Size
+                card.setWidth("60%");
+                card.setJustifyContentMode(JustifyContentMode.BETWEEN);
+                card.setAlignItems(Alignment.CENTER);
 
+                //Visual Styling
+                card.getStyle().set("background-color", "white");
+                card.getStyle().set("padding", "20px");
+                card.getStyle().set("border-radius", "12px");
+                card.getStyle().set("box-shadow", "0 4px 6px rgba(0,0,0,0.1)");
 
+                // Make the card look clickable
+                card.getStyle().set("cursor", "pointer");
+
+                //Text Styling
                 Span nameText = new Span(itemName);
-                Span priceText = new Span("$" + itemPrice); // Convert Double to String here
+                nameText.getStyle().set("font-weight", "bold");
+                nameText.getStyle().set("font-size", "1.1rem");
+                nameText.getStyle().set("color", "#333");
 
-                row.add(nameText, priceText);
+                Span priceText = new Span("$" + String.format("%.2f", itemPrice));
+                priceText.getStyle().set("color", "#2c3e50");
+                priceText.getStyle().set("font-weight", "600");
 
-                // Add the row to the main view
-                add(row);
+                card.add(nameText, priceText);
+
+                // Add Click Listener to the whole card
+                card.addClickListener(e -> {
+                    int index = names.indexOf(itemName);
+                    if (index != -1) {
+                        names.remove(index);
+                        prices.remove(index);
+                        itemsContainer.remove(card);
+                        Notification.show(itemName + " removed from cart");
+
+                        if (names.isEmpty()) {
+                            itemsContainer.add(new Span("Your cart is empty."));
+                        }
+                    }
+                });
+
+                itemsContainer.add(card);
             }
-
-
         }
+        return itemsContainer;
     }
 }
