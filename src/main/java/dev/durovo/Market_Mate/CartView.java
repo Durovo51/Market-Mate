@@ -20,15 +20,19 @@ import static dev.durovo.Market_Mate.MainView.*;
 public class CartView extends VerticalLayout {
     private static final String COLOR = "#89CFF0";
 
+    private H1 totalDisplay = new H1();
+
     public CartView() {
         getStyle().set("background-color", COLOR);
         setSizeFull();
         setAlignItems(Alignment.CENTER);
+        totalDisplay.getStyle().set("color", "white");
 
         add(
                 createHeader(),
                 createCartItems(),
-                createBackButton()
+                createBackButton(),
+                createCheckOutButton()
         );
     }
 
@@ -42,8 +46,36 @@ public class CartView extends VerticalLayout {
                     ui.navigate(MainView.class)
             );
         });
+
         return backButton;
     }
+    private Component createCheckOutButton() {
+        Button checkoutButton = new Button("Checkout");
+        checkoutButton.getStyle().set("color", "black");
+        checkoutButton.getStyle().set("background-color", "white");
+        checkoutButton.getStyle().set("cursor", "pointer");
+        HorizontalLayout header = new HorizontalLayout(totalDisplay);
+        checkoutButton.addClickListener(e -> {
+            ArrayList<Double> prices = getCartItemPrices();
+            double sum = 0;
+            for (double price : prices) {
+                sum += price;
+            }
+            totalDisplay.setText("Your total is $" + sum);
+
+            totalDisplay.getStyle().set("color", "white");
+            totalDisplay.getStyle().set("font-family", "Georgia, serif");
+            totalDisplay.getStyle().set("margin-top", "20px");
+
+            header.setWidthFull();
+            header.setJustifyContentMode(JustifyContentMode.CENTER);
+            add(header);
+        });
+        return checkoutButton;
+    }
+
+
+
 
     private Component createHeader() {
         H1 cartTitle = new H1("Your Shopping Cart");
