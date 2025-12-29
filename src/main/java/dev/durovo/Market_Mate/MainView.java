@@ -1,5 +1,5 @@
 //Jake Bryant
-//To push to github
+
 package dev.durovo.Market_Mate;
 
 import com.vaadin.flow.component.Component;
