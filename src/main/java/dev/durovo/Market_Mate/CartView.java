@@ -1,5 +1,5 @@
 //Jake Bryant
-//To push to github
+
 package dev.durovo.Market_Mate;
 
 import com.vaadin.flow.component.Component;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import static dev.durovo.Market_Mate.MainView.*;
 
-// The text inside quote marks is the URL (e.g., localhost:8080/cart)
+
 @Route("cart")
 public class CartView extends VerticalLayout {
     private static final String COLOR = "#89CFF0";

@@ -1,5 +1,5 @@
 //Jake Bryant
-//To push to github
+
 package dev.durovo.Market_Mate;
 
 import com.vaadin.flow.component.Component;
@@ -14,7 +14,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
 
-@Route("")
+@Route("Main")
 public class MainView extends VerticalLayout {
 
     private static final String COLOR = "#89CFF0";
@@ -46,7 +46,8 @@ public class MainView extends VerticalLayout {
         add(
                 createHeader(),
                 shelf,
-                nextPageButton()
+                checkoutScreenButton(),
+                loginViewButton()
         );
     }
 
@@ -76,7 +77,7 @@ public class MainView extends VerticalLayout {
         // Give the card a fixed width so they grid nicely
         card.setWidth("250px");
 
-        //Adds a border/shadow to make it look like a "card"
+        //Makes it look like card
         card.getStyle().set("border", "1px solid #ddd");
         card.getStyle().set("border-radius", "8px");
         card.getStyle().set("box-shadow", "0 2px 4px rgba(0,0,0,0.1)");
@@ -121,7 +122,7 @@ public class MainView extends VerticalLayout {
         return card;
     }
 
-    private Component nextPageButton() {
+    private Component checkoutScreenButton() {
         Button sendButton = new Button("Go to cart");
         sendButton.setWidthFull();
         sendButton.getStyle().set("background-color", "white");
@@ -134,8 +135,21 @@ public class MainView extends VerticalLayout {
         return sendButton;
 }
 
-// static ArrayList<String> cartItemName = new ArrayList<String>();
-//    static ArrayList<Double> cartItemPrice = new ArrayList<Double>();
+    private Component loginViewButton() {
+        Button sendButton = new Button("Go to login screen");
+        sendButton.setWidthFull();
+        sendButton.getStyle().set("background-color", "white");
+        sendButton.getStyle().set("cursor", "pointer");
+        sendButton.addClickListener(event -> {
+            sendButton.getUI().ifPresent(ui ->
+                    ui.navigate(LoginView.class)
+            );
+        });
+        return sendButton;
+    }
+
+
+
 
 public static ArrayList<String> getCartItemNames() {
     return cartItemName;
