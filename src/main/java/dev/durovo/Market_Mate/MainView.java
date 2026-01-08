@@ -13,6 +13,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
+import com.vaadin.flow.component.splitlayout.SplitLayout;
 
 @Route("Main")
 public class MainView extends VerticalLayout {
@@ -34,6 +35,12 @@ public class MainView extends VerticalLayout {
         shelf.setFlexWrap(FlexLayout.FlexWrap.WRAP);
         shelf.setJustifyContentMode(JustifyContentMode.BETWEEN);
         shelf.getStyle().set("gap", "20px");
+        SplitLayout buttonSplit= new SplitLayout();
+        buttonSplit.addToPrimary(loginViewButton());
+        buttonSplit.addToSecondary(checkoutScreenButton());
+        buttonSplit.setWidthFull();
+
+
 
         for (int i = 1; i <= 12; i++) {
             shelf.add(createItem(
@@ -44,28 +51,15 @@ public class MainView extends VerticalLayout {
         }
 
         add(
-                createHeader(),
+                addSpacer(),
                 shelf,
-                checkoutScreenButton(),
-                loginViewButton()
+                buttonSplit
         );
     }
 
-    private Component createHeader() {
-        H1 title = new H1("Welcome to Market-Mate!");
 
 
-        title.getStyle().set("color", "white");
-        title.getStyle().set("font-family", "Georgia, serif");
-        title.getStyle().set("margin-top", "20px");
-
-        HorizontalLayout header = new HorizontalLayout(title);
-        header.setWidthFull();
-        header.setJustifyContentMode(JustifyContentMode.CENTER);
-        return header;
-    }
-
-    private Component createItem(String name, String price, String imageUrl) {
+    public Component createItem(String name, String price, String imageUrl) {
         //The Container for a single item
         VerticalLayout card = new VerticalLayout();
 
@@ -148,7 +142,11 @@ public class MainView extends VerticalLayout {
         return sendButton;
     }
 
-
+private Component addSpacer() {
+    Div spacer = new Div();
+    spacer.setHeight("40px");
+    return spacer;
+}
 
 
 public static ArrayList<String> getCartItemNames() {
