@@ -30,7 +30,7 @@ public class MainView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
 
         //Outer Parent
-        FlexLayout shelf = new FlexLayout();
+       FlexLayout shelf = new FlexLayout();
         shelf.setWidthFull();
         shelf.setFlexWrap(FlexLayout.FlexWrap.WRAP);
         shelf.setJustifyContentMode(JustifyContentMode.BETWEEN);
@@ -59,7 +59,7 @@ public class MainView extends VerticalLayout {
 
 
 
-    public Component createItem(String name, String price, String imageUrl) {
+    public static Component createItem(String name, String price, String imageUrl) {
         //The Container for a single item
         VerticalLayout card = new VerticalLayout();
 

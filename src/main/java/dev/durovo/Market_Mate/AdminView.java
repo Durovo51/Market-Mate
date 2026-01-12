@@ -95,6 +95,8 @@ public class AdminView extends VerticalLayout {
             if(name != null && price != null){
                 Component newCard = cards(name, price);
                 rightSide.add(newCard);
+                createItem(name, price, "https://dummyimage.com/300x200/000/fff"); //Doesn't work right now because the arrayList isn't static,
+                                                                                           // I should probably set up a locally ran database
                 if(price.substring(0,1).equals("$")) {
                     Notification.show("Your item's name is set to " + name + " and price is set to " + price);
                 } else  {
@@ -103,6 +105,8 @@ public class AdminView extends VerticalLayout {
             } else {
                 Notification.show("Please fill out the name field and the price field");
             }
+
+
 
         });
         return submit;
