@@ -20,7 +20,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MarketMateApplication {
 
 	public static void main(String[] args) {
+        connectItemInfoDB db = new connectItemInfoDB();
+        db.createTable();
 		SpringApplication.run(MarketMateApplication.class, args);
+
 	}
 
 

@@ -12,6 +12,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
+import java.util.List;
 
 import static dev.durovo.Market_Mate.MainView.*;
 
@@ -57,6 +58,14 @@ public class AdminView extends VerticalLayout {
         splitLayout.setSplitterPosition(25); // Keep your 25% split
 
         add(createHeader(), splitLayout, loginViewButton());
+
+        connectItemInfoDB db = new connectItemInfoDB();
+        List<Item> allItems = db.getAllItems();
+        for (Item item : allItems) {
+            Component card = cards(item.getName(), item.getPrice());
+            rightSide.add(card);
+        }
+
     }
 
 
@@ -105,8 +114,10 @@ public class AdminView extends VerticalLayout {
             } else {
                 Notification.show("Please fill out the name field and the price field");
             }
-
-
+            //Adds items to the database
+            connectItemInfoDB db = new connectItemInfoDB();
+            Item newItem = new Item(name, price);
+            db.addItem(newItem);
 
         });
         return submit;
@@ -115,6 +126,7 @@ public class AdminView extends VerticalLayout {
     //RIGHT SIDE LAYOUT STUFF
 
     private Component cards(String name, String price){
+        connectItemInfoDB db = new connectItemInfoDB();
         VerticalLayout card = new VerticalLayout();
         card.setSpacing(false);
         card.setPadding(true);
@@ -130,6 +142,21 @@ public class AdminView extends VerticalLayout {
         Span nameSpan = new Span("Name: " + name);
         Span priceSpan = new Span("Price: " + price);
         card.add(nameSpan, priceSpan);
+
+
+       card.addClickListener(event -> {
+           try {
+
+               int id = db.findItemID(name);
+               db.deleteItem(id);
+               card.removeFromParent();
+               Notification.show(name + " deleted successfully", 3000, Notification.Position.BOTTOM_END);
+
+           } catch (Exception e) {
+               Notification.show("Error deleting item: " + e.getMessage());
+           }
+       });
+
         return card;
     }
 
