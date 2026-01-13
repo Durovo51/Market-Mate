@@ -56,13 +56,16 @@ public class CartView extends VerticalLayout {
         checkoutButton.getStyle().set("cursor", "pointer");
         HorizontalLayout header = new HorizontalLayout(totalDisplay);
         checkoutButton.addClickListener(e -> {
-            ArrayList<Double> prices = getCartItemPrices();
-            double sum = 0;
-            for (double price : prices) {
-                sum += price;
+            try {
+                ArrayList<Double> prices = getCartItemPrices();
+                double sum = 0;
+                for (double price : prices) {
+                    sum += price;
+                }
+                totalDisplay.setText("Your total is $" + sum);
+            } catch (Exception error) {
+                Notification.show("Error: Item does not have an integer price. Check in with stall manager.");
             }
-            totalDisplay.setText("Your total is $" + sum);
-
             totalDisplay.getStyle().set("color", "white");
             totalDisplay.getStyle().set("font-family", "Georgia, serif");
             totalDisplay.getStyle().set("margin-top", "20px");

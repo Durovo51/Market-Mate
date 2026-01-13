@@ -13,6 +13,8 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
+import java.util.List;
+
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 
 @Route("Main")
@@ -33,7 +35,7 @@ public class MainView extends VerticalLayout {
        FlexLayout shelf = new FlexLayout();
         shelf.setWidthFull();
         shelf.setFlexWrap(FlexLayout.FlexWrap.WRAP);
-        shelf.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        shelf.setJustifyContentMode(JustifyContentMode.START);
         shelf.getStyle().set("gap", "20px");
         SplitLayout buttonSplit= new SplitLayout();
         buttonSplit.addToPrimary(loginViewButton());
@@ -41,13 +43,11 @@ public class MainView extends VerticalLayout {
         buttonSplit.setWidthFull();
 
 
+        connectItemInfoDB db = new connectItemInfoDB();
+        List<Item> allItems = db.getAllItems();
+        for (Item item : allItems) {
+            shelf.add(createItem(item.getName(), item.getPrice(), "https://dummyimage.com/300x200/000/fff"));
 
-        for (int i = 1; i <= 12; i++) {
-            shelf.add(createItem(
-                    "Sample Item " + i,
-                    "$49.99",
-                    "https://dummyimage.com/300x200/000/fff"
-            ));
         }
 
         add(
@@ -88,15 +88,23 @@ public class MainView extends VerticalLayout {
 
         //Adding objects to cart
         image.addClickListener(event -> {
-            Notification.show("Added " + name + " to cart."); //Need to make SQLite logic to have a cart for when
-            // you're on the website, could use parallel array list for now to show functionality
             try {
+                String cleanPrice = price.replaceAll("[^0-9.]", "");
+                double itemPrice = Double.parseDouble(cleanPrice);
                 cartItemName.add(name);
-                String noDollarSign = price.substring(1);
-                double itemPrice = Double.parseDouble(noDollarSign);
                 cartItemPrice.add(itemPrice);
+                Notification.show("Added " + name + " to cart.");
+
             } catch (NumberFormatException e) {
-                System.err.println("Invalid input: " + price + " cannot be converted to a double."); //Handle the input value being in wrong format
+                String priceLower = price.toLowerCase();
+                if(priceLower.equals("free")) {
+                    cartItemName.add(name);
+                    cartItemPrice.add(0.0);
+                    Notification.show("Added " + name + " to cart.");
+                } else {
+                    Notification.show("Invalid input: " + price + " cannot be converted to a double.");
+                }
+
             }
         });
 
