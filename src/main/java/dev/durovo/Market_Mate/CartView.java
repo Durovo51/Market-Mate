@@ -55,6 +55,8 @@ public class CartView extends VerticalLayout {
         checkoutButton.getStyle().set("background-color", "white");
         checkoutButton.getStyle().set("cursor", "pointer");
         HorizontalLayout header = new HorizontalLayout(totalDisplay);
+        //Math to get total price - Not accounting for tax because the program assumes the user is manually
+        // imputing the total into a card reader which should auto take tax
         checkoutButton.addClickListener(e -> {
             try {
                 ArrayList<Double> prices = getCartItemPrices();

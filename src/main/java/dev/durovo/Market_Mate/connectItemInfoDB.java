@@ -9,8 +9,8 @@ public class connectItemInfoDB {
     private static final String URL = "jdbc:sqlite:itemInfo.db";
 
     public void createTable() {
+        //Connects to DB and runs sql code to create a new table if the table doesn't exist already.
         String sql = "CREATE TABLE IF NOT EXISTS item_info (id integer PRIMARY KEY, name text, price text);";
-
         try (Connection conn = DriverManager.getConnection(URL);
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
@@ -37,6 +37,7 @@ public class connectItemInfoDB {
     }
 
     public List<Item> getAllItems() {
+        //Goes through entire database of items objects and adds the items to an array of type item
         List<Item> itemList = new ArrayList<>();
         String sql = "SELECT id, name, price FROM item_info";
 
@@ -61,6 +62,7 @@ public class connectItemInfoDB {
 
 
     public void deleteItem(int id) {
+        //Based on ID finds the items matching the ID and removes the item.
         String sql = "DELETE FROM item_info WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(URL);
@@ -80,6 +82,7 @@ public class connectItemInfoDB {
         }
     }
 
+    //Takes the name and looks for a matching name in database and if it is there it returns the id
     public int findItemID(String name) {
         String sql = "SELECT id FROM item_info WHERE name = ?";
         int id = -1;

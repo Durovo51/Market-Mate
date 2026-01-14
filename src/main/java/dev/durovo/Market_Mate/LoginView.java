@@ -16,7 +16,7 @@ public class LoginView extends VerticalLayout {
     private static final String COLOR = "#89CFF0";
 
     private int loginCount = 0;
-    //Real password doesn't matter becuase program makes you set a password either way before login
+    //Real password doesn't matter because program makes you set a password either way before login
     private String realPassword = "";
 
     public LoginView() {

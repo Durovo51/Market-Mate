@@ -19,6 +19,7 @@ import static dev.durovo.Market_Mate.MainView.*;
 @Route("Admin")
 public class AdminView extends VerticalLayout {
     private static final String COLOR = "#89CFF0";
+    //Establishes two text areas that will later be put on the same side of a split layout
     TextArea setName = new TextArea("Product Name");
     TextArea setPrice = new TextArea("Product Price");
     VerticalLayout leftSide = new VerticalLayout();
@@ -49,16 +50,17 @@ public class AdminView extends VerticalLayout {
         rightSide.setPadding(true);
         rightSide.setSpacing(true);
         rightSide.getStyle().set("background-color", "#F0F0F0");
+        //accounts for if the storefront has a lot of items so they don't overflow off the page by adding scrollbar
         rightSide.getStyle().set("overflow-y", "auto");
 
 
         splitLayout.setSizeFull();
         splitLayout.addToPrimary(leftSide);
         splitLayout.addToSecondary(rightSide);
-        splitLayout.setSplitterPosition(25); // Keep your 25% split
+        splitLayout.setSplitterPosition(25);
 
         add(createHeader(), splitLayout, loginViewButton());
-
+        //Connects to database and adds a card for every item in the database displaying it on the admin panel with it's name and price
         connectItemInfoDB db = new connectItemInfoDB();
         List<Item> allItems = db.getAllItems();
         for (Item item : allItems) {
@@ -92,7 +94,7 @@ public class AdminView extends VerticalLayout {
         return header;
     }
 
-    //LEFT SIDE LAYOUT STUFF
+    //LEFT SIDE LAYOUT Code
 
 
     private Component setButton(){
@@ -104,8 +106,8 @@ public class AdminView extends VerticalLayout {
             if(name != null && price != null){
                 Component newCard = cards(name, price);
                 rightSide.add(newCard);
-                createItem(name, price, "https://dummyimage.com/300x200/000/fff"); //Doesn't work right now because the arrayList isn't static,
-                                                                                           // I should probably set up a locally ran database
+                createItem(name, price, "https://dummyimage.com/300x200/000/fff");
+
                 if(price.substring(0,1).equals("$")) {
                     Notification.show("Your item's name is set to " + name + " and price is set to " + price);
                 } else  {
@@ -143,7 +145,7 @@ public class AdminView extends VerticalLayout {
         Span priceSpan = new Span("Price: " + price);
         card.add(nameSpan, priceSpan);
 
-
+        //Code to delete items from the database if the admin doesn't want to sell them anymore by clicking card
        card.addClickListener(event -> {
            try {
 
